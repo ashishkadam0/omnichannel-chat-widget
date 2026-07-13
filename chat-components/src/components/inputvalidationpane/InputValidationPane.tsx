@@ -233,6 +233,8 @@ function InputValidationPane(props: IInputValidationPaneProps) {
                             value={inputValue ?? defaultInputValidationPaneControlProps.inputInitialText}
                             id={props.controlProps?.inputId ?? defaultInputValidationPaneControlProps.inputId}
                             ariaLabel={props.controlProps?.inputAriaLabel || defaultInputValidationPaneControlProps.inputAriaLabel}
+                            invalid={isInvalidInput}
+                            aria-describedby={isInvalidInput ? elementId + "-invalidinputerrormessage" : undefined}
                             borderless={isInvalidInput}
                             onChange={handleInputChange}
                             onKeyUp={handleInputKeyUp}

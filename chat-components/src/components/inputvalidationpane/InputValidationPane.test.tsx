@@ -235,4 +235,25 @@ describe("Input Validation Pane component", () => {
             const sendButton = screen.getByText(Texts.SaveButtonText);
             expect(sendButton).not.toBeDisabled();
     });
+
+            it("associates the invalid-input error message with the email field (MAS 1.3.1)", () => {
+                render(<InputValidationPane {...defaultInputValidationPaneProps}/>);
+
+                const input = screen.getAllByRole("textbox")[0];
+
+                // Enter an invalid email and attempt to send to surface the error.
+                fireEvent.change(input, {
+                    target: { value: "not-an-email" }
+                });
+                fireEvent.click(screen.getByText(Texts.SaveButtonText));
+
+                // The error message is rendered as an alert...
+                const errorAlert = screen.getByRole("alert");
+                expect(errorAlert).toBeInTheDocument();
+
+                // ...and must be programmatically associated with the input so that
+                // screen readers announce it when focus is on the email field.
+                expect(input).toHaveAttribute("aria-invalid", "true");
+                expect(input.getAttribute("aria-describedby") ?? "").toContain(errorAlert.id);
+            });
 });
